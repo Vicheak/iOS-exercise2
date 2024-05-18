@@ -9,11 +9,11 @@ import UIKit
 
 extension NSNotification.Name {
     
-    static let saveData = NSNotification.Name.init("saveData")
-    static let editData = NSNotification.Name.init("editData")
-    static let deleteData = NSNotification.Name.init("deleteData")
-    static let folderSaveData = NSNotification.Name.init("folderSaveData")
-    static let folderEditData = NSNotification.Name.init("folderEditData")
-    static let folderDeleteData = NSNotification.Name.init("folderDeleteData")
+    static let saveFolder = NSNotification.Name.init("saveFolder")
+    static let editFolder = NSNotification.Name.init("editFolder")
+    static let deleteFolder = NSNotification.Name.init("deleteFolder")
+    static let saveNote = NSNotification.Name.init("saveNote")
+    static let editNote = NSNotification.Name.init("editNote")
+    static let deleteNote = NSNotification.Name.init("deleteNote")
     
 }

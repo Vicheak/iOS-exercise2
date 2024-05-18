@@ -10,21 +10,21 @@ import Foundation
 struct Folder {
     
     var id: UUID
-    var folderName: String
-    var folderDetail: String
+    var name: String
+    var detail: String
     var notes: [Note]
     
-    init(id: UUID, folderName: String, folderDetail: String, notes: [Note]) {
+    init(id: UUID, name: String, detail: String, notes: [Note]) {
         self.id = id
-        self.folderName = folderName
-        self.folderDetail = folderDetail
+        self.name = name
+        self.detail = detail
         self.notes = notes
     }
     
-    init(folderName: String, folderDetail: String, notes: [Note]) {
+    init(name: String, detail: String, notes: [Note]) {
         self.id = UUID()
-        self.folderName = folderName
-        self.folderDetail = folderDetail
+        self.name = name
+        self.detail = detail
         self.notes = notes
     }
     

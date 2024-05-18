@@ -21,29 +21,19 @@ class LoginScreenViewController: UIViewController {
     var bottomConstraint = NSLayoutConstraint()
     let tapGestureRecognizer = UITapGestureRecognizer()
     
+    var keyboardUtil: KeyboardUtil!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.title = "Login"
         
         setUpViews()
         
+        keyboardUtil = KeyboardUtil(viewController: self, view: view, bottomConstraint: bottomConstraint)
+        keyboardUtil.keyboardNotification()
+        
         tapGestureRecognizer.addTarget(self, action: #selector(tapEndEdit))
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(showKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(hideKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func showKeyboard(notification: Notification){
-        guard let size = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        bottomConstraint.constant = size.height
-        view.layoutIfNeeded()
-    }
-    
-    @objc func hideKeyboard(){
-        bottomConstraint.constant = 0
-        view.layoutIfNeeded()
     }
     
     private func setUpViews(){
@@ -93,7 +83,7 @@ class LoginScreenViewController: UIViewController {
         NSLayoutConstraint(item: stackView, attribute: .centerY, relatedBy: .equal, toItem: mainView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
         //image view
-        imageView.image = UIImage(systemName: "person.circle")
+        imageView.image = UIImage(systemName: "person.2.badge.key.fill")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
@@ -133,34 +123,37 @@ class LoginScreenViewController: UIViewController {
     }
     
     @objc func loginButtonTapped(sender: UIButton){
+        let tabBarController = UITabBarController()
+        
+        let homeScreenNavigationController = UINavigationController(rootViewController: HomeScreenViewController())
+        homeScreenNavigationController.tabBarItem = UITabBarItem(title: "Folders", image: UIImage(systemName: "folder.fill"), tag: 0)
+        homeScreenNavigationController.tabBarItem.title = "Folders"
+        homeScreenNavigationController.navigationBar.prefersLargeTitles = true
+        homeScreenNavigationController.navigationItem.largeTitleDisplayMode = .always
+        
+        let settingScreenViewController = UINavigationController(rootViewController: SettingScreenViewController())
+        settingScreenViewController.tabBarItem = UITabBarItem(title: "Setting", image: UIImage(systemName: "person.2.badge.gearshape.fill"), tag: 0)
+        settingScreenViewController.tabBarItem.badgeColor = .red
+        settingScreenViewController.navigationBar.prefersLargeTitles = true
+        settingScreenViewController.navigationItem.largeTitleDisplayMode = .always
+        
+        tabBarController.setViewControllers([homeScreenNavigationController, settingScreenViewController], animated: true)
+        tabBarController.selectedViewController = homeScreenNavigationController
+        tabBarController.modalPresentationStyle = .fullScreen
+        
         let username = usernameTextField.text ?? ""
         let password = passwordTextField.text ?? ""
         
         if LoginValidation.validate(target: self, username: username, password: password){
-            print(username)
-            print(password)
             if username == "Admin" && password == "2024" {
                 //proceed home screen
-                let tabBarController = UITabBarController()
-                
-                let homeScreenNavigationController = UINavigationController(rootViewController: HomeScreenViewController())
-                homeScreenNavigationController.tabBarItem = UITabBarItem(title: "Notes", image: UIImage(systemName: "note.text"), tag: 0)
-                homeScreenNavigationController.tabBarItem.title = "Notes"
-                homeScreenNavigationController.navigationBar.prefersLargeTitles = true
-                homeScreenNavigationController.navigationItem.largeTitleDisplayMode = .always
-                
-                let settingScreenViewController = UINavigationController(rootViewController: SettingScreenViewController())
-                settingScreenViewController.tabBarItem = UITabBarItem(title: "Setting", image: UIImage(systemName: "person.2.badge.gearshape.fill"), tag: 0)
-                settingScreenViewController.tabBarItem.badgeColor = .red
                 settingScreenViewController.tabBarItem.badgeValue = username
-                settingScreenViewController.navigationBar.prefersLargeTitles = true
-                settingScreenViewController.navigationItem.largeTitleDisplayMode = .always
-                
-                tabBarController.setViewControllers([homeScreenNavigationController, settingScreenViewController], animated: true)
-                tabBarController.selectedViewController = homeScreenNavigationController
-                
-                tabBarController.modalPresentationStyle = .fullScreen
-                present(tabBarController, animated: true)
+               
+                present(tabBarController, animated: true) { [weak self] in
+                    guard let self = self else { return }
+                    usernameTextField.text = ""
+                    passwordTextField.text = ""
+                }
             } else {
                 let alertController = UIAlertController(title: "Error", message: "Incorrect username and password" , preferredStyle: .alert)
                 let alertAction = UIAlertAction(title: "OK", style: .destructive)

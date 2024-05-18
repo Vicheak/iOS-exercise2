@@ -9,33 +9,34 @@ import UIKit
 
 class TableNotesViewController: UIViewController {
     
+    let titleLabel = UILabel()
+    let detailLabel = UILabel()
     let tableView = UITableView();
-    var folder: Folder!
+    
+    var folderIndex: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad();
         view.backgroundColor = .white;
-        navigationItem.title = "Note List"
+        navigationItem.title = "Note List - Folder, \(DataSource.folders[folderIndex].name)"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus.rectangle.on.rectangle"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
-        navigationItem.rightBarButtonItem?.tintColor = .systemBlue
-        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ], for: .normal)
         
         setUpViews();
+        
+        titleLabel.text = "Folder Name : \(DataSource.folders[folderIndex].name)"
+        detailLabel.text = "Folder Detail : \(DataSource.folders[folderIndex].detail)"
         
         tableView.register(NoteTableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
         tableView.delegate = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(createNewNote), name: NSNotification.Name.saveData, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(editNote), name: NSNotification.Name.editData, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(deleteNote), name: NSNotification.Name.deleteData, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(createNote), name: NSNotification.Name.saveNote, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editNote), name: NSNotification.Name.editNote, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteNote), name: NSNotification.Name.deleteNote, object: nil)
     }
     
     @objc func rightBarButtonTapped(sender: UIBarButtonItem){
         let createNoteViewController = CreateNoteViewController()
-        createNoteViewController.folderId = folder.id
         navigationController?.pushViewController(createNoteViewController, animated: true)
     }
     
@@ -44,32 +45,52 @@ class TableNotesViewController: UIViewController {
         tableView.layoutIfNeeded()
     }
     
-    @objc func createNewNote(notification: Notification){
-        tableView.reloadData()
+    @objc func createNote(notification: Notification){
+        guard let note = notification.object as? Note else { return }
+        DataSource.folders[folderIndex].notes.append(note)
+        tableView.insertRows(at: [IndexPath(row: DataSource.folders[folderIndex].notes.count - 1, section: 0)], with: .automatic)
     }
     
     @objc func editNote(notification: Notification){
         guard let note = notification.object as? Note else { return }
-        if let index = folder.notes.firstIndex(where: { n in
+        if let index = DataSource.folders[folderIndex].notes.firstIndex(where: { n in
             n.id == note.id
         }){
-            folder.notes[index].title = note.title
-            folder.notes[index].detail = note.detail
+            DataSource.folders[folderIndex].notes[index].title = note.title
+            DataSource.folders[folderIndex].notes[index].detail = note.detail
             tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
         }
     }
     
     @objc func deleteNote(notification: Notification){
         guard let indexPath = notification.object as? IndexPath else { return }
-        folder.notes.remove(at: indexPath.row)
+        DataSource.folders[folderIndex].notes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
     
     private func setUpViews(){
+        view.addSubview(titleLabel)
+        titleLabel.font = UIFont(name: "HelveticaNeue", size: 18)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            NSLayoutConstraint(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 20),
+            NSLayoutConstraint(item: titleLabel, attribute: .left, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .left, multiplier: 1, constant: 5),
+            NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .right, relatedBy: .equal, toItem: titleLabel, attribute: .right, multiplier: 1, constant: 5)
+        ])
+        
+        view.addSubview(detailLabel)
+        detailLabel.font = UIFont(name: "HelveticaNeue", size: 16)
+        detailLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            NSLayoutConstraint(item: detailLabel, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1, constant: 10),
+            NSLayoutConstraint(item: detailLabel, attribute: .left, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .left, multiplier: 1, constant: 5),
+            NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .right, relatedBy: .equal, toItem: detailLabel, attribute: .right, multiplier: 1, constant: 5)
+        ])
+        
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: detailLabel, attribute: .top, multiplier: 1, constant: 40),
             NSLayoutConstraint(item: tableView, attribute: .leading, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .leading, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: tableView, attribute: .bottom, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: tableView, attribute: .trailing, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .trailing, multiplier: 1, constant: 0)
@@ -85,12 +106,12 @@ extension TableNotesViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return folder.notes.count
+        return DataSource.folders[folderIndex].notes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! NoteTableViewCell
-        let note = folder.notes[indexPath.row]
+        let note = DataSource.folders[folderIndex].notes[indexPath.row]
         cell.titleLabel.text = note.title
         cell.detailLabel.text = note.detail
         return cell
@@ -109,7 +130,7 @@ extension TableNotesViewController: UITableViewDelegate {
             guard let self = self else { return}
             let alertController = UIAlertController(title: "Confirmation", message: "Are you sure to remove?", preferredStyle: .alert)
             let yesAction = UIAlertAction(title: "OK", style: .destructive) { _ in
-                NotificationCenter.default.post(name: NSNotification.Name.deleteData, object: indexPath)
+                NotificationCenter.default.post(name: NSNotification.Name.deleteNote, object: indexPath)
             }
             let noAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
                 complete(true)
@@ -122,7 +143,7 @@ extension TableNotesViewController: UITableViewDelegate {
         let editAction = UIContextualAction(style: .normal, title: "Edit") { [weak self] _, _, complete in
             guard let self = self else { return }
             let editNoteViewController = EditNoteViewController()
-            editNoteViewController.note = folder.notes[indexPath.row]
+            editNoteViewController.note = DataSource.folders[folderIndex].notes[indexPath.row]
             navigationController?.pushViewController(editNoteViewController, animated: true)
         }
         editAction.backgroundColor = .systemGreen

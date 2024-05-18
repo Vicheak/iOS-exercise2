@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5209655A2BF9079000D9B3AB /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520965592BF9079000D9B3AB /* DataSource.swift */; };
 		52CF22DE2BF888D100C58C32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF22DD2BF888D100C58C32 /* AppDelegate.swift */; };
 		52CF22E52BF888D100C58C32 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 52CF22E42BF888D100C58C32 /* Base */; };
 		52CF22E72BF888D200C58C32 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52CF22E62BF888D200C58C32 /* Assets.xcassets */; };
@@ -17,22 +18,21 @@
 		52CF22FF2BF8900600C58C32 /* SettingScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF22FE2BF8900600C58C32 /* SettingScreenViewController.swift */; };
 		52CF23012BF894E800C58C32 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23002BF894E800C58C32 /* Note.swift */; };
 		52CF23052BF8951900C58C32 /* NSNotification+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23042BF8951900C58C32 /* NSNotification+Ext.swift */; };
-		52CF23072BF8955800C58C32 /* NoteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23062BF8955800C58C32 /* NoteCollectionViewCell.swift */; };
-		52CF23092BF8958800C58C32 /* NoteTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23082BF8958800C58C32 /* NoteTemplateViewController.swift */; };
+		52CF23072BF8955800C58C32 /* FolderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23062BF8955800C58C32 /* FolderCollectionViewCell.swift */; };
 		52CF230B2BF895AD00C58C32 /* KeyboardUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF230A2BF895AD00C58C32 /* KeyboardUtil.swift */; };
 		52CF230D2BF895CA00C58C32 /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF230C2BF895CA00C58C32 /* EditNoteViewController.swift */; };
-		52CF230F2BF895EE00C58C32 /* NoteValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF230E2BF895EE00C58C32 /* NoteValidation.swift */; };
+		52CF230F2BF895EE00C58C32 /* DataValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF230E2BF895EE00C58C32 /* DataValidation.swift */; };
 		52CF23132BF896B100C58C32 /* CreateNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23122BF896B100C58C32 /* CreateNoteViewController.swift */; };
 		52CF23152BF8987600C58C32 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23142BF8987600C58C32 /* Folder.swift */; };
-		52CF23172BF8996200C58C32 /* DataSourceFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23162BF8996200C58C32 /* DataSourceFolder.swift */; };
 		52CF23192BF89A4600C58C32 /* CreateFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23182BF89A4600C58C32 /* CreateFolderViewController.swift */; };
-		52CF231B2BF89A6200C58C32 /* FolderTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF231A2BF89A6200C58C32 /* FolderTemplateViewController.swift */; };
+		52CF231B2BF89A6200C58C32 /* TemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF231A2BF89A6200C58C32 /* TemplateViewController.swift */; };
 		52CF231D2BF89FD100C58C32 /* EditFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF231C2BF89FD100C58C32 /* EditFolderViewController.swift */; };
 		52CF231F2BF8A11800C58C32 /* TableNotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF231E2BF8A11800C58C32 /* TableNotesViewController.swift */; };
 		52CF23212BF8A17300C58C32 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CF23202BF8A17300C58C32 /* NoteTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		520965592BF9079000D9B3AB /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 		52CF22DA2BF888D100C58C32 /* exercise002.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = exercise002.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52CF22DD2BF888D100C58C32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52CF22E42BF888D100C58C32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -45,16 +45,14 @@
 		52CF22FE2BF8900600C58C32 /* SettingScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingScreenViewController.swift; sourceTree = "<group>"; };
 		52CF23002BF894E800C58C32 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		52CF23042BF8951900C58C32 /* NSNotification+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotification+Ext.swift"; sourceTree = "<group>"; };
-		52CF23062BF8955800C58C32 /* NoteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCollectionViewCell.swift; sourceTree = "<group>"; };
-		52CF23082BF8958800C58C32 /* NoteTemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTemplateViewController.swift; sourceTree = "<group>"; };
+		52CF23062BF8955800C58C32 /* FolderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCollectionViewCell.swift; sourceTree = "<group>"; };
 		52CF230A2BF895AD00C58C32 /* KeyboardUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardUtil.swift; sourceTree = "<group>"; };
 		52CF230C2BF895CA00C58C32 /* EditNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
-		52CF230E2BF895EE00C58C32 /* NoteValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteValidation.swift; sourceTree = "<group>"; };
+		52CF230E2BF895EE00C58C32 /* DataValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataValidation.swift; sourceTree = "<group>"; };
 		52CF23122BF896B100C58C32 /* CreateNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNoteViewController.swift; sourceTree = "<group>"; };
 		52CF23142BF8987600C58C32 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
-		52CF23162BF8996200C58C32 /* DataSourceFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceFolder.swift; sourceTree = "<group>"; };
 		52CF23182BF89A4600C58C32 /* CreateFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFolderViewController.swift; sourceTree = "<group>"; };
-		52CF231A2BF89A6200C58C32 /* FolderTemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTemplateViewController.swift; sourceTree = "<group>"; };
+		52CF231A2BF89A6200C58C32 /* TemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewController.swift; sourceTree = "<group>"; };
 		52CF231C2BF89FD100C58C32 /* EditFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewController.swift; sourceTree = "<group>"; };
 		52CF231E2BF8A11800C58C32 /* TableNotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableNotesViewController.swift; sourceTree = "<group>"; };
 		52CF23202BF8A17300C58C32 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
@@ -71,6 +69,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		520965582BF9078700D9B3AB /* datasource */ = {
+			isa = PBXGroup;
+			children = (
+				520965592BF9079000D9B3AB /* DataSource.swift */,
+			);
+			path = datasource;
+			sourceTree = "<group>";
+		};
 		52CF22D12BF888D100C58C32 = {
 			isa = PBXGroup;
 			children = (
@@ -90,11 +96,11 @@
 		52CF22DC2BF888D100C58C32 /* exercise002 */ = {
 			isa = PBXGroup;
 			children = (
+				520965582BF9078700D9B3AB /* datasource */,
 				52CF22F72BF889C300C58C32 /* validation */,
 				52CF22F62BF889B900C58C32 /* view */,
 				52CF22F52BF889AF00C58C32 /* util */,
 				52CF22F42BF889A600C58C32 /* extension */,
-				52CF22F32BF8899A00C58C32 /* datasource */,
 				52CF22F22BF8897100C58C32 /* model */,
 				52CF22F12BF8896200C58C32 /* viewcontroller */,
 				52CF22DD2BF888D100C58C32 /* AppDelegate.swift */,
@@ -112,14 +118,12 @@
 				52CF22F82BF889E500C58C32 /* LoginScreenViewController.swift */,
 				52CF22FC2BF88E9600C58C32 /* HomeScreenViewController.swift */,
 				52CF22FE2BF8900600C58C32 /* SettingScreenViewController.swift */,
-				52CF23082BF8958800C58C32 /* NoteTemplateViewController.swift */,
 				52CF230C2BF895CA00C58C32 /* EditNoteViewController.swift */,
 				52CF23122BF896B100C58C32 /* CreateNoteViewController.swift */,
 				52CF23182BF89A4600C58C32 /* CreateFolderViewController.swift */,
-				52CF231A2BF89A6200C58C32 /* FolderTemplateViewController.swift */,
+				52CF231A2BF89A6200C58C32 /* TemplateViewController.swift */,
 				52CF231C2BF89FD100C58C32 /* EditFolderViewController.swift */,
 				52CF231E2BF8A11800C58C32 /* TableNotesViewController.swift */,
-				52CF23202BF8A17300C58C32 /* NoteTableViewCell.swift */,
 			);
 			path = viewcontroller;
 			sourceTree = "<group>";
@@ -131,14 +135,6 @@
 				52CF23142BF8987600C58C32 /* Folder.swift */,
 			);
 			path = model;
-			sourceTree = "<group>";
-		};
-		52CF22F32BF8899A00C58C32 /* datasource */ = {
-			isa = PBXGroup;
-			children = (
-				52CF23162BF8996200C58C32 /* DataSourceFolder.swift */,
-			);
-			path = datasource;
 			sourceTree = "<group>";
 		};
 		52CF22F42BF889A600C58C32 /* extension */ = {
@@ -153,7 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				52CF230A2BF895AD00C58C32 /* KeyboardUtil.swift */,
-				52CF230E2BF895EE00C58C32 /* NoteValidation.swift */,
+				52CF230E2BF895EE00C58C32 /* DataValidation.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -161,7 +157,8 @@
 		52CF22F62BF889B900C58C32 /* view */ = {
 			isa = PBXGroup;
 			children = (
-				52CF23062BF8955800C58C32 /* NoteCollectionViewCell.swift */,
+				52CF23202BF8A17300C58C32 /* NoteTableViewCell.swift */,
+				52CF23062BF8955800C58C32 /* FolderCollectionViewCell.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -248,22 +245,21 @@
 				52CF23192BF89A4600C58C32 /* CreateFolderViewController.swift in Sources */,
 				52CF231F2BF8A11800C58C32 /* TableNotesViewController.swift in Sources */,
 				52CF231D2BF89FD100C58C32 /* EditFolderViewController.swift in Sources */,
-				52CF23072BF8955800C58C32 /* NoteCollectionViewCell.swift in Sources */,
+				52CF23072BF8955800C58C32 /* FolderCollectionViewCell.swift in Sources */,
 				52CF23212BF8A17300C58C32 /* NoteTableViewCell.swift in Sources */,
-				52CF230F2BF895EE00C58C32 /* NoteValidation.swift in Sources */,
+				52CF230F2BF895EE00C58C32 /* DataValidation.swift in Sources */,
+				5209655A2BF9079000D9B3AB /* DataSource.swift in Sources */,
 				52CF22F92BF889E500C58C32 /* LoginScreenViewController.swift in Sources */,
 				52CF23132BF896B100C58C32 /* CreateNoteViewController.swift in Sources */,
 				52CF22FD2BF88E9600C58C32 /* HomeScreenViewController.swift in Sources */,
 				52CF22FB2BF88D4300C58C32 /* LoginValidation.swift in Sources */,
 				52CF22FF2BF8900600C58C32 /* SettingScreenViewController.swift in Sources */,
-				52CF23172BF8996200C58C32 /* DataSourceFolder.swift in Sources */,
 				52CF230B2BF895AD00C58C32 /* KeyboardUtil.swift in Sources */,
-				52CF23092BF8958800C58C32 /* NoteTemplateViewController.swift in Sources */,
 				52CF22DE2BF888D100C58C32 /* AppDelegate.swift in Sources */,
 				52CF23152BF8987600C58C32 /* Folder.swift in Sources */,
 				52CF23012BF894E800C58C32 /* Note.swift in Sources */,
 				52CF230D2BF895CA00C58C32 /* EditNoteViewController.swift in Sources */,
-				52CF231B2BF89A6200C58C32 /* FolderTemplateViewController.swift in Sources */,
+				52CF231B2BF89A6200C58C32 /* TemplateViewController.swift in Sources */,
 				52CF23052BF8951900C58C32 /* NSNotification+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

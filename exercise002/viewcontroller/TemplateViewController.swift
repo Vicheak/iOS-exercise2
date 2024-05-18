@@ -1,5 +1,5 @@
 //
-//  NoteTemplateViewController.swift
+//  FolderTemplateViewController.swift
 //  exercise002
 //
 //  Created by @suonvicheakdev on 18/5/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NoteTemplateViewController: UIViewController {
+class TemplateViewController: UIViewController {
     
     let scrollView = UIScrollView()
     let mainView = UIView()
@@ -64,7 +64,7 @@ class NoteTemplateViewController: UIViewController {
         
         mainView.addSubview(titleTextField)
         titleTextField.font = UIFont(name: "HelveticaNeue", size: 17)
-        titleTextField.placeholder = "Enter note title"
+        titleTextField.placeholder = "Enter title"
         titleTextField.borderStyle = .roundedRect
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -75,7 +75,7 @@ class NoteTemplateViewController: UIViewController {
         
         mainView.addSubview(detailTextView)
         detailTextView.font = UIFont(name: "HelveticaNeue", size: 17)
-        detailTextView.text = "Enter note detail"
+        detailTextView.text = "Enter detail"
         detailTextView.textColor = .lightGray
         detailTextView.layer.borderWidth = 0.4
         detailTextView.layer.borderColor = UIColor.lightGray.cgColor
@@ -129,7 +129,7 @@ class NoteTemplateViewController: UIViewController {
     
 }
 
-extension NoteTemplateViewController: UITextFieldDelegate, UITextViewDelegate {
+extension TemplateViewController: UITextFieldDelegate, UITextViewDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == titleTextField {
@@ -139,11 +139,10 @@ extension NoteTemplateViewController: UITextFieldDelegate, UITextViewDelegate {
     }
    
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == "Enter note detail" {
+        if textView.text == detailTextView.text {
             textView.text = ""
             textView.textColor = .black
         }
     }
     
 }
-

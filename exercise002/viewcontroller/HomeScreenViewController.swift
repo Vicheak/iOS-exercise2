@@ -11,32 +11,26 @@ class HomeScreenViewController: UIViewController {
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    var dataSourceFolder = DataSourceFolder()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.title = "Home Screen"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
-        navigationItem.rightBarButtonItem?.tintColor = .systemBlue
-        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ], for: .normal)
+        navigationItem.title = "Home"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "folder.fill.badge.plus"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         
         setUpViews()
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(NoteCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(FolderCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         
-        NotificationCenter.default.addObserver(self, selector: #selector(createNewNote), name: NSNotification.Name.folderSaveData, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(editNote), name: NSNotification.Name.folderEditData, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(deleteNote), name: NSNotification.Name.folderDeleteData, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(createFolder), name: NSNotification.Name.saveFolder, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editFolder), name: NSNotification.Name.editFolder, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteFolder), name: NSNotification.Name.deleteFolder, object: nil)
     }
     
     @objc func rightBarButtonTapped(sender: UIBarButtonItem){
-        let createNoteViewController = CreateFolderViewController()
-        navigationController?.pushViewController(createNoteViewController, animated: true)
+        let createFolderViewController = CreateFolderViewController()
+        navigationController?.pushViewController(createFolderViewController, animated: true)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
@@ -44,22 +38,26 @@ class HomeScreenViewController: UIViewController {
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
-    @objc func createNewNote(notification: Notification){
-        guard notification.object is Folder else { return }
-        collectionView.insertItems(at: [IndexPath(row: dataSourceFolder.folders.count - 1, section: 0)])
+    @objc func createFolder(notification: Notification){
+        guard let folder = notification.object as? Folder else { return }
+        DataSource.folders.append(folder)
+        collectionView.insertItems(at: [IndexPath(row: DataSource.folders.count - 1, section: 0)])
     }
     
-    @objc func editNote(notification: Notification){
+    @objc func editFolder(notification: Notification){
         guard let folder = notification.object as? Folder else { return }
-        if let index = dataSourceFolder.folders.firstIndex(where: { n in
+        if let index = DataSource.folders.firstIndex(where: { n in
             n.id == folder.id
         }){
+            DataSource.folders[index].name = folder.name
+            DataSource.folders[index].detail = folder.detail
             collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }
     }
     
-    @objc func deleteNote(notification: Notification){
+    @objc func deleteFolder(notification: Notification){
         guard let indexPath = notification.object as? IndexPath else { return }
+        DataSource.folders.remove(at: indexPath.row)
         collectionView.deleteItems(at: [indexPath])
     }
     
@@ -83,15 +81,15 @@ extension HomeScreenViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSourceFolder.folders.count
+        return DataSource.folders.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let collectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! NoteCollectionViewCell
-        collectionViewCell.contentView.backgroundColor = .systemYellow
-        let folder = dataSourceFolder.folders[indexPath.row]
-        collectionViewCell.titleLabel.text = folder.folderName
-        collectionViewCell.detailLabel.text = folder.folderDetail
+        let collectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FolderCollectionViewCell
+//        collectionViewCell.contentView.backgroundColor = .systemYellow
+        let folder = DataSource.folders[indexPath.row]
+        collectionViewCell.titleLabel.text = folder.name
+        collectionViewCell.detailLabel.text = folder.detail
         return collectionViewCell
     }
     
@@ -101,7 +99,7 @@ extension HomeScreenViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let collectionViewCellEstimatedSize = (collectionView.frame.width - 10) / 4 - 5
-        return CGSize(width: collectionViewCellEstimatedSize, height: collectionViewCellEstimatedSize)
+        return CGSize(width: collectionViewCellEstimatedSize, height: collectionViewCellEstimatedSize + 10)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -126,33 +124,33 @@ extension HomeScreenViewController: UICollectionViewDelegate {
             cell?.contentView.backgroundColor = .systemBackground
         } completion: { _ in
             UIView.animate(withDuration: 0.2) {
-                cell?.contentView.backgroundColor = .systemYellow
+                cell?.contentView.backgroundColor = .systemBackground
             }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let refreshAction = UIAction(title: "View Notes", image: UIImage(systemName: "arrow.clockwise.circle")) { [weak self] (action) in
+            let refreshAction = UIAction(title: "View Notes", image: UIImage(systemName: "eye.circle.fill")) { [weak self] (action) in
                 guard let self = self else { return }
                 let tableNotesViewController = TableNotesViewController()
-                tableNotesViewController.folder = dataSourceFolder.folders[indexPath.row]
+                tableNotesViewController.folderIndex = indexPath.row
                 navigationController?.pushViewController(tableNotesViewController, animated: true)
             }
             let editAction = UIAction(title: "Edit", image: UIImage(systemName: "square.and.pencil")) { [weak self] (action) in
                 guard let self = self else { return }
                 let editViewController = EditFolderViewController()
-                editViewController.folder = dataSourceFolder.folders[indexPath.row]
+                editViewController.folder = DataSource.folders[indexPath.row]
                 navigationController?.pushViewController(editViewController, animated: true)
             }
-            let yes = UIAction(title: "Yes", image: UIImage(systemName: "checkmark.seal.fill")) { (action) in
-                NotificationCenter.default.post(name: NSNotification.Name.folderDeleteData, object: indexPath)
+            let yes = UIAction(title: "Yes", image: UIImage(systemName: "checkmark.circle")) { (action) in
+                NotificationCenter.default.post(name: NSNotification.Name.deleteFolder, object: indexPath)
             }
             let no = UIAction(title: "No", image: UIImage(systemName: "xmark.app")) { _ in
                 
             }
             let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash.square"), options: .destructive, children: [yes, no])
-            return UIMenu(title: "note", children: [refreshAction, editAction, deleteAction])
+            return UIMenu(title: "Options", children: [refreshAction, editAction, deleteAction])
         }
     }
     

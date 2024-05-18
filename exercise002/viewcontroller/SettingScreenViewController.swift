@@ -15,23 +15,19 @@ class SettingScreenViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "Setting"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "lock.open.fill"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "lock.slash.fill"), style: .plain, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = .systemBlue
         navigationItem.rightBarButtonItem?.setTitleTextAttributes([
             NSAttributedString.Key.foregroundColor: UIColor.white
         ], for: .normal)
         
         setUpViews()
-    
-        var username = navigationController!.tabBarItem.badgeValue!
         
-        titleLabel.text = "Welcome \(username)"
+        titleLabel.text = "Welcome \(navigationController!.tabBarItem.badgeValue!)"
     }
     
     @objc func rightBarButtonTapped(sender: UIBarButtonItem){
-        let loginScreenViewController = LoginScreenViewController()
-        loginScreenViewController.modalPresentationStyle = .fullScreen
-        present(loginScreenViewController, animated: false)
+        dismiss(animated: false)
     }
     
     private func setUpViews(){
@@ -42,10 +38,9 @@ class SettingScreenViewController: UIViewController {
         NSLayoutConstraint.activate([
             NSLayoutConstraint(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 20),
             NSLayoutConstraint(item: titleLabel, attribute: .left, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .left, multiplier: 1, constant: 10),
-            NSLayoutConstraint(item: titleLabel, attribute: .right, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .right, multiplier: 1, constant: 10)
+            NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .right, relatedBy: .equal, toItem: titleLabel, attribute: .right, multiplier: 1, constant: 10)
         ])
-        titleLabel.numberOfLines = 0
-
+        titleLabel.numberOfLines = 1
     }
     
 }

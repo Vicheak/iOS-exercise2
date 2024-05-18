@@ -7,11 +7,11 @@
 
 import UIKit
 
-class NoteValidation {
+class DataValidation {
     
     static func validate(target viewController: UIViewController, title: String, detail: String, messages: [String] = [
-        "Please enter note title!",
-        "Please enter note detail!"
+        "Please enter title!",
+        "Please enter detail!"
     ]) -> Bool {
         var alertController: UIAlertController
         let alertAction = UIAlertAction(title: "OK", style: .destructive)

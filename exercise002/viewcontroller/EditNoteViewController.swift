@@ -4,10 +4,11 @@
 //
 //  Created by @suonvicheakdev on 18/5/24.
 //
+//
 
 import UIKit
 
-class EditNoteViewController: NoteTemplateViewController {
+class EditNoteViewController: TemplateViewController {
     
     var note: Note!
     
@@ -25,13 +26,13 @@ class EditNoteViewController: NoteTemplateViewController {
         
         let note = Note(id: self.note.id, title: title, detail: detail)
         
-        if NoteValidation.validate(target: self, title: title, detail: detail){
+        if DataValidation.validate(target: self, title: title, detail: detail){
             let alertController = UIAlertController(title: "Success", message: "A new note has been edited!", preferredStyle: .alert)
             let alertAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
                 guard let self = self else { return }
                 navigationController?.popViewController(animated: true)
             }
-            NotificationCenter.default.post(name: NSNotification.Name.editData, object: note)
+            NotificationCenter.default.post(name: NSNotification.Name.editNote, object: note)
             alertController.addAction(alertAction)
             present(alertController, animated: true)
         }

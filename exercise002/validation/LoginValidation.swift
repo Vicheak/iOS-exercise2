@@ -14,7 +14,7 @@ class LoginValidation {
         let alertAction = UIAlertAction(title: "OK", style: .destructive)
         alertController.addAction(alertAction)
     
-        if username.isEmpty || password.isEmpty{
+        if username.isEmpty || password.isEmpty {
             viewController.present(alertController, animated: true)
             return false
         }
