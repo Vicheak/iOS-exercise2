@@ -145,7 +145,7 @@ class LoginScreenViewController: UIViewController {
         let password = passwordTextField.text ?? ""
         
         if LoginValidation.validate(target: self, username: username, password: password){
-            if username == "Admin" && password == "2024" {
+            if (username == "admin" || username == "aditi") && password == "2024" {
                 //proceed home screen
                 settingScreenViewController.tabBarItem.badgeValue = username
                
