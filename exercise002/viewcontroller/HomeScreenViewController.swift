@@ -131,7 +131,7 @@ extension HomeScreenViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let refreshAction = UIAction(title: "View Notes", image: UIImage(systemName: "eye.circle.fill")) { [weak self] (action) in
+            let viewNoteAction = UIAction(title: "View Notes", image: UIImage(systemName: "eye.circle.fill")) { [weak self] (action) in
                 guard let self = self else { return }
                 let tableNotesViewController = TableNotesViewController()
                 tableNotesViewController.folderIndex = indexPath.row
@@ -150,7 +150,7 @@ extension HomeScreenViewController: UICollectionViewDelegate {
                 
             }
             let deleteAction = UIMenu(title: "Delete", image: UIImage(systemName: "trash.square"), options: .destructive, children: [yes, no])
-            return UIMenu(title: "Options", children: [refreshAction, editAction, deleteAction])
+            return UIMenu(title: "Options", children: [viewNoteAction, editAction, deleteAction])
         }
     }
     
