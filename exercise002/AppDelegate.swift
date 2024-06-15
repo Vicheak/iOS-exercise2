@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         let loginScreenViewController = LoginScreenViewController()
+//        let storyboard = UIStoryboard(name: "Hero", bundle: nil)
+//        let heroViewController = storyboard.instantiateViewController(withIdentifier: "SkeletonViewController1")
         
         window?.rootViewController = loginScreenViewController
         window?.makeKeyAndVisible()

@@ -71,30 +71,26 @@ class TableNotesViewController: UIViewController {
     private func setUpViews(){
         view.addSubview(titleLabel)
         titleLabel.font = UIFont(name: "HelveticaNeue", size: 18)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 20),
-            NSLayoutConstraint(item: titleLabel, attribute: .left, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .left, multiplier: 1, constant: 5),
-            NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .right, relatedBy: .equal, toItem: titleLabel, attribute: .right, multiplier: 1, constant: 5)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.left.equalTo(view.safeAreaLayoutGuide).offset(5)
+            make.right.equalTo(view.safeAreaLayoutGuide).offset(-5)
+        }
         
         view.addSubview(detailLabel)
         detailLabel.font = UIFont(name: "HelveticaNeue", size: 16)
-        detailLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: detailLabel, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1, constant: 10),
-            NSLayoutConstraint(item: detailLabel, attribute: .left, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .left, multiplier: 1, constant: 5),
-            NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .right, relatedBy: .equal, toItem: detailLabel, attribute: .right, multiplier: 1, constant: 5)
-        ])
+        detailLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.left.equalTo(view.safeAreaLayoutGuide).offset(5)
+            make.right.equalTo(view.safeAreaLayoutGuide).offset(-5)
+
+        }
         
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: detailLabel, attribute: .top, multiplier: 1, constant: 40),
-            NSLayoutConstraint(item: tableView, attribute: .leading, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .leading, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: tableView, attribute: .bottom, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: tableView, attribute: .trailing, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .trailing, multiplier: 1, constant: 0)
-        ])
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(detailLabel.snp.bottom).offset(30)
+            make.leading.bottom.trailing.equalTo(view.safeAreaLayoutGuide)
+        }
     }
     
 }

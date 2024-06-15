@@ -6,14 +6,15 @@
 //
 
 import UIKit
+import SnapKit
 
 class KeyboardUtil {
     
     var viewController: UIViewController!
     var view: UIView!
-    var bottomConstraint: NSLayoutConstraint!
+    var bottomConstraint: Constraint!
     
-    init(viewController: UIViewController!, view: UIView!, bottomConstraint: NSLayoutConstraint!) {
+    init(viewController: UIViewController!, view: UIView!, bottomConstraint: Constraint!) {
         self.viewController = viewController
         self.view = view
         self.bottomConstraint = bottomConstraint
@@ -26,12 +27,12 @@ class KeyboardUtil {
     
     @objc func showKeyboard(notification: Notification){
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        bottomConstraint.constant = keyboardFrame.height
+        bottomConstraint.update(offset: keyboardFrame.height * (-1))
         view.layoutIfNeeded()
     }
     
     @objc func hideKeyboard(){
-        bottomConstraint.constant = 0
+        bottomConstraint.update(offset: 0)
         view.layoutIfNeeded()
     }
     

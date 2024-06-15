@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class FolderCollectionViewCell: UICollectionViewCell {
 
@@ -31,22 +32,21 @@ class FolderCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(folderImageView)
         folderImageView.image = UIImage(systemName: "folder.fill")
         folderImageView.contentMode = .scaleAspectFit
-        folderImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            folderImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
-            folderImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            folderImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-            folderImageView.heightAnchor.constraint(equalTo: folderImageView.widthAnchor)
-        ])
+        folderImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview().offset(5)
+            make.trailing.equalToSuperview().offset(-5)
+            make.height.equalTo(folderImageView.snp.width)
+        }
         
         contentView.addSubview(titleLabel)
         titleLabel.textAlignment = .center
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: titleLabel, attribute: .left, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1, constant: 5),
-            NSLayoutConstraint(item: contentView, attribute: .right, relatedBy: .equal, toItem: titleLabel, attribute: .right, multiplier: 1, constant: 5),
-            NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1, constant: 5),
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(5)
+            make.right.equalToSuperview().offset(-5)
+            make.bottom.equalToSuperview().offset(-5)
+        }
+        
 //        titleLabel.setContentHuggingPriority(UILayoutPriority(251), for: .vertical)
         
 //        contentView.addSubview(detailLabel)

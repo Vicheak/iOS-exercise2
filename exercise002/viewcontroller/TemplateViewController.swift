@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class TemplateViewController: UIViewController {
     
@@ -14,7 +15,7 @@ class TemplateViewController: UIViewController {
     let titleTextField = UITextField()
     let detailTextView = UITextView()
     let saveButton = UIButton()
-    var bottomConstraint: NSLayoutConstraint!
+    var bottomConstraint: Constraint!
     
     var keyboardUtil: KeyboardUtil!
     
@@ -40,38 +41,27 @@ class TemplateViewController: UIViewController {
  
     private func setUpViews(){
         view.addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        bottomConstraint = NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .bottom, relatedBy: .equal, toItem: scrollView, attribute: .bottom, multiplier: 1, constant: 0)
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: scrollView, attribute: .top, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: scrollView, attribute: .leading, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .leading, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: scrollView, attribute: .trailing, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .trailing, multiplier: 1, constant: 0),
-            bottomConstraint,
-        ])
+        scrollView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            bottomConstraint = make.bottom.equalTo(view.safeAreaLayoutGuide).constraint
+        }
         
         scrollView.addSubview(mainView)
-        mainView.translatesAutoresizingMaskIntoConstraints = false
-        let mainViewHeightConstraint = NSLayoutConstraint(item: mainView, attribute: .height, relatedBy: .equal, toItem: scrollView.frameLayoutGuide, attribute: .height, multiplier: 1, constant: 0)
-        mainViewHeightConstraint.isActive = true
-        mainViewHeightConstraint.priority = .defaultLow
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: mainView, attribute: .top, relatedBy: .equal, toItem: scrollView.contentLayoutGuide, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: mainView, attribute: .leading, relatedBy: .equal, toItem: scrollView.contentLayoutGuide, attribute: .leading, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: mainView, attribute: .bottom, relatedBy: .equal, toItem: scrollView.contentLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: mainView, attribute: .trailing, relatedBy: .equal, toItem: scrollView.contentLayoutGuide, attribute: .trailing, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: mainView, attribute: .width, relatedBy: .equal, toItem: scrollView.frameLayoutGuide, attribute: .width, multiplier: 1, constant: 0)
-        ])
+        mainView.snp.makeConstraints { make in
+            make.top.leading.bottom.trailing.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide)
+            make.height.equalTo(scrollView.frameLayoutGuide).priority(.low)
+        }
         
         mainView.addSubview(titleTextField)
         titleTextField.font = UIFont(name: "HelveticaNeue", size: 17)
         titleTextField.placeholder = "Enter title"
         titleTextField.borderStyle = .roundedRect
-        titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: titleTextField, attribute: .top, relatedBy: .equal, toItem: mainView, attribute: .top, multiplier: 1, constant: 20),
-            NSLayoutConstraint(item: titleTextField, attribute: .leading, relatedBy: .equal, toItem: mainView, attribute: .leading, multiplier: 1, constant: 10),
-            NSLayoutConstraint(item: mainView, attribute: .trailing, relatedBy: .equal, toItem: titleTextField, attribute: .trailing, multiplier: 1, constant: 10)
-        ])
+        titleTextField.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+        }
         
         mainView.addSubview(detailTextView)
         detailTextView.font = UIFont(name: "HelveticaNeue", size: 17)
@@ -80,25 +70,29 @@ class TemplateViewController: UIViewController {
         detailTextView.layer.borderWidth = 0.4
         detailTextView.layer.borderColor = UIColor.lightGray.cgColor
         detailTextView.layer.cornerRadius = 5
-        detailTextView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: detailTextView, attribute: .top, relatedBy: .equal, toItem: titleTextField, attribute: .bottom, multiplier: 1, constant: 20),
-            NSLayoutConstraint(item: detailTextView, attribute: .leading, relatedBy: .equal, toItem: mainView, attribute: .leading, multiplier: 1, constant: 10),
-            NSLayoutConstraint(item: mainView, attribute: .trailing, relatedBy: .equal, toItem: detailTextView, attribute: .trailing, multiplier: 1, constant: 10),
-            NSLayoutConstraint(item: detailTextView, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 150)
-        ])
+        detailTextView.snp.makeConstraints { make in
+            make.top.equalTo(titleTextField.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.height.greaterThanOrEqualTo(150)
+        }
         
         mainView.addSubview(saveButton)
         saveButton.setTitle("Save", for: .normal)
         saveButton.backgroundColor = .systemBlue
         saveButton.layer.cornerRadius = 10
-        saveButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             NSLayoutConstraint(item: saveButton, attribute: .top, relatedBy: .equal, toItem: detailTextView, attribute: .bottom, multiplier: 1, constant: 20),
             NSLayoutConstraint(item: mainView, attribute: .bottom, relatedBy: .equal, toItem: saveButton, attribute: .bottom, multiplier: 1, constant: 20),
             NSLayoutConstraint(item: saveButton, attribute: .centerX, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .centerX, multiplier: 1, constant: 0),
             NSLayoutConstraint(item: saveButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 150)
         ])
+        saveButton.snp.makeConstraints { make in
+            make.top.equalTo(detailTextView.snp.bottom).offset(20)
+            make.bottom.equalToSuperview().offset(-20)
+            make.centerX.equalTo(view.safeAreaLayoutGuide)
+            make.width.equalTo(150)
+        }
         
         let tapGuestureRecognizer = UITapGestureRecognizer()
         mainView.addGestureRecognizer(tapGuestureRecognizer)

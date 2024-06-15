@@ -1,0 +1,6 @@
+framework module Pods_exercise002 {
+  umbrella header "Pods-exercise002-umbrella.h"
+
+  export *
+  module * { export * }
+}

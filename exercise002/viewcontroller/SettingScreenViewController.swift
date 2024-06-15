@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class SettingScreenViewController: UIViewController {
     
@@ -23,10 +24,17 @@ class SettingScreenViewController: UIViewController {
         
         setUpViews()
         
-        titleLabel.text = "Welcome \(navigationController!.tabBarItem.badgeValue!)"
+        let username = UserDefaults.standard.string(forKey: "username");
+        
+//        titleLabel.text = "Welcome \(navigationController!.tabBarItem.badgeValue!)"
+        titleLabel.text = "Welcome \(String(describing: username!))";
     }
     
     @objc func rightBarButtonTapped(sender: UIBarButtonItem){
+        //clear data from UserDefaults
+        UserDefaults.standard.set(false, forKey: "isLogOn")
+        UserDefaults.standard.set(nil, forKey: "username")
+        
         dismiss(animated: false)
     }
     
@@ -34,12 +42,11 @@ class SettingScreenViewController: UIViewController {
         view.addSubview(titleLabel)
         titleLabel.font = UIFont(name: "HelveticaNeue", size: 24)
         titleLabel.textAlignment = .center
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 20),
-            NSLayoutConstraint(item: titleLabel, attribute: .left, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .left, multiplier: 1, constant: 10),
-            NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .right, relatedBy: .equal, toItem: titleLabel, attribute: .right, multiplier: 1, constant: 10)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.left.equalTo(view.safeAreaLayoutGuide).offset(10)
+            make.right.equalTo(view.safeAreaLayoutGuide).offset(-10)
+        }
         titleLabel.numberOfLines = 1
     }
     

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class HomeScreenViewController: UIViewController {
     
@@ -63,13 +64,9 @@ class HomeScreenViewController: UIViewController {
     
     private func setUpViews(){
         view.addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: collectionView, attribute: .top, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: collectionView, attribute: .left, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .left, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: collectionView, attribute: .bottom, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: collectionView, attribute: .right, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .right, multiplier: 1, constant: 0)
-        ])
+        collectionView.snp.makeConstraints { make in
+            make.top.left.bottom.right.equalTo(view.safeAreaLayoutGuide)
+        }
     }
     
 }

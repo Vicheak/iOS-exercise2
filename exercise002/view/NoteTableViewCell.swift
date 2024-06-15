@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class NoteTableViewCell: UITableViewCell {
     
@@ -28,41 +29,36 @@ class NoteTableViewCell: UITableViewCell {
         contentView.addSubview(noteImageView)
         noteImageView.image = UIImage(systemName: "note.text")
         noteImageView.contentMode = .scaleAspectFill
-        noteImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            noteImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            noteImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            noteImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            noteImageView.heightAnchor.constraint(equalTo: noteImageView.widthAnchor)
-        ])
+        noteImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.leading.equalToSuperview().offset(5)
+            make.bottom.equalToSuperview().offset(-20)
+            make.height.equalTo(noteImageView.snp.width)
+        }
         
         contentView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 20),
-            NSLayoutConstraint(item: titleLabel, attribute: .left, relatedBy: .equal, toItem: noteImageView, attribute: .left, multiplier: 1, constant: 30),
-            NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1, constant: 20)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.left.equalToSuperview().offset(30)
+            make.bottom.equalToSuperview().offset(-20)
+        }
         
         contentView.addSubview(settingImageView)
         settingImageView.image = UIImage(systemName: "slider.horizontal.3")
         settingImageView.contentMode = .scaleAspectFill
-        settingImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            settingImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            settingImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-            settingImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            settingImageView.heightAnchor.constraint(equalTo: settingImageView.widthAnchor)
-        ])
+        settingImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-5)
+            make.bottom.equalToSuperview().offset(-20)
+            make.height.equalTo(settingImageView.snp.width)
+        }
 
         contentView.addSubview(detailLabel)
-        detailLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            NSLayoutConstraint(item: detailLabel, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 20),
-            NSLayoutConstraint(item: detailLabel, attribute: .right, relatedBy: .equal, toItem: settingImageView, attribute: .right, multiplier: 1, constant: -30),
-            NSLayoutConstraint(item: contentView, attribute: .bottom, relatedBy: .equal, toItem: detailLabel, attribute: .bottom, multiplier: 1, constant: 20)
-        ])
-
+        detailLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(20)
+            make.right.equalTo(settingImageView).offset(-30)
+            make.bottom.equalToSuperview().offset(-20)
+        }
     }
     
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class LoginScreenViewController: UIViewController {
     
@@ -18,7 +19,7 @@ class LoginScreenViewController: UIViewController {
     let usernameTextField = UITextField()
     let passwordTextField = UITextField()
     let loginButton = UIButton()
-    var bottomConstraint = NSLayoutConstraint()
+    var bottomConstraint: Constraint!
     let tapGestureRecognizer = UITapGestureRecognizer()
     
     var keyboardUtil: KeyboardUtil!
@@ -34,6 +35,15 @@ class LoginScreenViewController: UIViewController {
         
         tapGestureRecognizer.addTarget(self, action: #selector(tapEndEdit))
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        
+        let isLogOn = UserDefaults.standard.bool(forKey: "isLogOn")
+        let savedUsername = UserDefaults.standard.string(forKey: "username")
+         
+        if isLogOn {
+            DispatchQueue.main.async {
+                self.setUpTabBarThenNavigate(username: savedUsername)
+            }
+        }
     }
     
     private func setUpViews(){
@@ -50,23 +60,17 @@ class LoginScreenViewController: UIViewController {
         stackViewButton.addArrangedSubview(loginButton)
         
         //scroll view
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-        bottomConstraint = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0)
-        scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        bottomConstraint.isActive = true
+        scrollView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            bottomConstraint = make.bottom.equalTo(view.safeAreaLayoutGuide).constraint
+        }
         
         //main view
-        mainView.translatesAutoresizingMaskIntoConstraints = false
-        mainView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 0).isActive = true
-        mainView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 0).isActive = true
-        mainView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: 0).isActive = true
-        mainView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        mainView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, multiplier: 1, constant: 0).isActive = true
-        let mainViewHeightConstraint = mainView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor, multiplier: 1, constant: 0)
-        mainViewHeightConstraint.priority = .defaultLow
-        mainViewHeightConstraint.isActive = true
+        mainView.snp.makeConstraints { make in
+            make.top.leading.bottom.trailing.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide)
+            make.height.equalTo(scrollView.frameLayoutGuide).priority(.low)
+        }
         
         //stack view
         stackView.axis = .vertical
@@ -74,19 +78,22 @@ class LoginScreenViewController: UIViewController {
         stackView.distribution = .fill
         stackView.spacing = 20
         stackView.contentMode = .scaleToFill
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint(item: stackView, attribute: .top, relatedBy: .greaterThanOrEqual, toItem: mainView, attribute: .top, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: stackView, attribute: .leading, relatedBy: .equal, toItem: mainView, attribute: .leading, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: mainView, attribute: .bottom, relatedBy: .greaterThanOrEqual, toItem: stackView, attribute: .bottom, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: mainView, attribute: .trailing, relatedBy: .equal, toItem: stackView, attribute: .trailing, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: stackView, attribute: .centerX, relatedBy: .equal, toItem: mainView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: stackView, attribute: .centerY, relatedBy: .equal, toItem: mainView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        
+        stackView.snp.makeConstraints { make in
+            make.top.greaterThanOrEqualToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(10)
+            make.bottom.lessThanOrEqualToSuperview().offset(-10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
         
         //image view
         imageView.image = UIImage(systemName: "person.2.badge.key.fill")
         imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        imageView.snp.makeConstraints { make in
+            make.height.equalTo(100)
+        }
         
         //stack view for text field container
         stackViewTextField.axis = .vertical
@@ -114,8 +121,9 @@ class LoginScreenViewController: UIViewController {
         loginButton.setTitle("Login", for: .normal)
         loginButton.backgroundColor = .blue
         loginButton.layer.cornerRadius = 10
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        loginButton.snp.makeConstraints { make in
+            make.height.equalTo(40)
+        }
     }
     
     @objc func tapEndEdit(sender: UITapGestureRecognizer){
@@ -123,6 +131,34 @@ class LoginScreenViewController: UIViewController {
     }
     
     @objc func loginButtonTapped(sender: UIButton){
+        doLoginProcess()
+    }
+    
+    func doLoginProcess(){
+        let username = usernameTextField.text ?? ""
+        let password = passwordTextField.text ?? ""
+        
+        let isLogOn = UserDefaults.standard.bool(forKey: "isLogOn")
+        let savedUsername = UserDefaults.standard.string(forKey: "username")
+         
+        if isLogOn {
+            setUpTabBarThenNavigate(username: savedUsername)
+            return
+        }
+        
+        if LoginValidation.validate(target: self, username: username, password: password){
+            if (username == "Admin" || username == "aditi") && password == "2024" {
+                setUpTabBarThenNavigate(username: username)
+            } else {
+                let alertController = UIAlertController(title: "Error", message: "Incorrect username and password" , preferredStyle: .alert)
+                let alertAction = UIAlertAction(title: "OK", style: .destructive)
+                alertController.addAction(alertAction)
+                present(alertController, animated: true)
+            }
+        }
+    }
+    
+    func setUpTabBarThenNavigate(username: String?){
         let tabBarController = UITabBarController()
         
         let homeScreenNavigationController = UINavigationController(rootViewController: HomeScreenViewController())
@@ -141,25 +177,15 @@ class LoginScreenViewController: UIViewController {
         tabBarController.selectedViewController = homeScreenNavigationController
         tabBarController.modalPresentationStyle = .fullScreen
         
-        let username = usernameTextField.text ?? ""
-        let password = passwordTextField.text ?? ""
-        
-        if LoginValidation.validate(target: self, username: username, password: password){
-            if (username == "admin" || username == "aditi") && password == "2024" {
-                //proceed home screen
-                settingScreenViewController.tabBarItem.badgeValue = username
-               
-                present(tabBarController, animated: true) { [weak self] in
-                    guard let self = self else { return }
-                    usernameTextField.text = ""
-                    passwordTextField.text = ""
-                }
-            } else {
-                let alertController = UIAlertController(title: "Error", message: "Incorrect username and password" , preferredStyle: .alert)
-                let alertAction = UIAlertAction(title: "OK", style: .destructive)
-                alertController.addAction(alertAction)
-                present(alertController, animated: true)
-            }
+        present(tabBarController, animated: true) { [weak self] in
+            guard let self = self else { return }
+            
+            //save data to UserDefaults
+            UserDefaults.standard.set(true, forKey: "isLogOn")
+            UserDefaults.standard.set(username, forKey: "username")
+            
+            usernameTextField.text = ""
+            passwordTextField.text = ""
         }
     }
 
